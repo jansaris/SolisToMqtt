@@ -6,10 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import solis2mqtt.exceptions.SolisException;
-import solis2mqtt.exceptions.SolisMqttException;
-import solis2mqtt.exceptions.SolisParserException;
-import solis2mqtt.exceptions.SolisReaderException;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -20,6 +18,7 @@ public class SolisToMqttApplication {
 	private final SolisHtmlParser parser;
 	private final SolisReader reader;
 	private final SolisMqtt sender;
+	private int counter = 0;
 
 	public SolisToMqttApplication(SolisHtmlParser parser, SolisReader reader, SolisMqtt sender) {
 		this.parser = parser;
@@ -34,6 +33,7 @@ public class SolisToMqttApplication {
 	//Run every 30 seconds
 	@Scheduled(cron = "0/30 * * * * ?")
 	public void TryExecute() {
+		HeapDumper.dumpHeap();
 		try {
 			Execute();
 		} catch(SolisException ex) {
@@ -41,6 +41,7 @@ public class SolisToMqttApplication {
 		} catch(Exception ex) {
 			log.error("Didn't expect this error: {}", ex.getMessage());
 		}
+		HeapDumper.dumpHeap();
 	}
 
 	public void Execute() throws SolisException {
