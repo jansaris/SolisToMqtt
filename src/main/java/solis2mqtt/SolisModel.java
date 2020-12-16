@@ -10,8 +10,8 @@ import java.util.Optional;
 @Setter
 public class SolisModel {
     private Optional<Integer> power = Optional.empty();
-    private Optional<Double> yieldToday = Optional.empty();;
-    private Optional<Double> yieldTotal = Optional.empty();;
+    private Optional<Double> yieldToday = Optional.empty();
+    private Optional<Double> yieldTotal = Optional.empty();
 
     @Override
     public String toString() {
@@ -24,9 +24,9 @@ public class SolisModel {
 
     public String json() {
         ArrayList<String> values = new ArrayList<>();
-        if(power.isPresent()) values.add("\"power\":" + power.get());
-        if(yieldToday.isPresent()) values.add("\"today\":" + yieldToday.get());
-        if(yieldTotal.isPresent()) values.add("\"total\":" + yieldTotal.get());
+        power.ifPresent(integer -> values.add("\"power\":" + integer));
+        yieldToday.ifPresent(aDouble -> values.add("\"today\":" + aDouble));
+        yieldTotal.ifPresent(aDouble -> values.add("\"total\":" + aDouble));
         return "{" + String.join(",", values) + "}";
     }
 }

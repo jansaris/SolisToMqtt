@@ -25,11 +25,11 @@ public class SolisMqtt {
             throw new SolisMqttException("Failed to send data to Mqtt", ex);
         }
         finally {
-            if(client == null) {
+            if(client != null) {
                 try {
                     client.close();
                 } catch (MqttException ex) {
-                    throw new SolisMqttException("Failed to close the Mqtt connection", ex);
+                    log.error("Failed to close the Mqtt connection: {}", ex.getMessage());
                 }
             }
         }
