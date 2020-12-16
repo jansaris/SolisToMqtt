@@ -30,14 +30,14 @@ public class SolisToMqttApplication {
 		SpringApplication.run(SolisToMqttApplication.class, args);
 	}
 
-	//Run every 30 seconds
-	@Scheduled(cron = "0/30 * * * * ?")
+	@Scheduled(cron = "${solis.schedule}")
 	public void TryExecute() {
 		HeapDumper.dumpHeap();
 		try {
 			Execute();
 		} catch(SolisException ex) {
 			log.error("One step went wrong: {}", ex.getMessage());
+			if(ex.getCause() != null) log.error("Step error: {}", ex.getCause().getMessage());
 		} catch(Exception ex) {
 			log.error("Didn't expect this error: {}", ex.getMessage());
 		}
