@@ -40,13 +40,13 @@ Maven will build the docker container automatically.
 
 For the manual steps:  
 - Build: 
-`docker build -t com.homeautomation/solis2mqtt:0.0.1-SNAPSHOT .`  
+`docker build -t solis2mqtt:0.0.1-SNAPSHOT .`  
 - Run: 
 `docker run -v c:/temp:/logs -e "SOLIS_INVERTERURL=http://solisinverter/status.html" -e "SOLIS_MQTTADDRESS=127.0.0.1" com.homeautomation/solis2mqtt:0.0.1-SNAPSHOT`  
 - Stop:
-`docker stop com.homeautomation/solis2mqtt:0.0.1-SNAPSHOT`  
+`docker stop solis2mqtt:0.0.1-SNAPSHOT`  
 - Save:
-`docker save -o c:\temp\solis2mqtt.tar com.homeautomation/solis2mqtt:0.0.1-SNAPSHOT`  
+`docker save -o c:\temp\solis2mqtt.tar solis2mqtt:0.0.1-SNAPSHOT`  
 - Load:
 `docker load -i solis2mqtt.tar`
 
