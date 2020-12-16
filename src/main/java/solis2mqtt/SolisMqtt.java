@@ -15,13 +15,23 @@ public class SolisMqtt {
 
     public void send(SolisModel model) throws SolisMqttException {
         log.debug("Send model broker using mqtt: '{}'", model.json());
+        IMqttClient client = null;
         try {
-            IMqttClient client = createClient();
+            client = createClient();
             MqttMessage message = new MqttMessage(model.json().getBytes());
             log.info("Send '{}' to topic '{}'", model.json(), configuration.getMqttTopic());
             client.publish(configuration.getMqttTopic(), message);
         } catch(MqttException ex) {
             throw new SolisMqttException("Failed to send data to Mqtt", ex);
+        }
+        finally {
+            if(client == null) {
+                try {
+                    client.close();
+                } catch (MqttException ex) {
+                    throw new SolisMqttException("Failed to close the Mqtt connection", ex);
+                }
+            }
         }
     }
 
@@ -32,7 +42,7 @@ public class SolisMqtt {
         MqttConnectOptions options = new MqttConnectOptions();
         options.setAutomaticReconnect(true);
         options.setCleanSession(true);
-        options.setConnectionTimeout(1);
+        options.setConnectionTimeout(30);
         publisher.connect(options);
         return publisher;
     }
