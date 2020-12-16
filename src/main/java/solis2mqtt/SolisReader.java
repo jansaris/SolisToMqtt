@@ -42,7 +42,7 @@ public class SolisReader {
         URL url = new URL(configuration.getInverterUrl());
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
-        con.setConnectTimeout(100);
+        con.setConnectTimeout(1000);
         addAuthorization(con);
         log.debug("Open the connection");
         int responseCode = con.getResponseCode();
@@ -51,13 +51,14 @@ public class SolisReader {
             throw new HTTPException(responseCode);
         }
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
         ArrayList<String> content = new ArrayList<>();
-        while ((inputLine = in.readLine()) != null) {
-            content.add(inputLine);
+        String inputLine;
+        try(BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+            while ((inputLine = in.readLine()) != null) {
+                content.add(inputLine);
+            }
         }
-        in.close();
+
         return content;
     }
 
