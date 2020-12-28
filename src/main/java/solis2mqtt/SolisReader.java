@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -32,6 +33,9 @@ public class SolisReader {
         } catch(HTTPException ex) {
             String error = String.format("Got invalid response from Solis (%d)", ex.getStatusCode());
             throw new SolisReaderException(error, ex);
+        } catch(SocketTimeoutException ex){
+            String error = String.format("Failed to read from the server: %s", ex.getMessage());
+            throw new SolisReaderException(error, ex);
         } catch(IOException ex) {
             String error = String.format("Failed to open the connection: %s", ex.getMessage());
             throw new SolisReaderException(error, ex);
@@ -43,6 +47,7 @@ public class SolisReader {
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.setConnectTimeout(1000);
+        con.setReadTimeout(1000);
         addAuthorization(con);
         log.debug("Open the connection");
         int responseCode = con.getResponseCode();
