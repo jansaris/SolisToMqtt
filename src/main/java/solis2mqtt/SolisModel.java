@@ -15,16 +15,13 @@ public class SolisModel {
 
     @Override
     public String toString() {
-        return "SolisModel{"
-                + "power=" + power
-                + ",yieldToday=" + yieldToday
-                + ",yieldTotal=" + yieldTotal
-                + '}';
+        return json();
     }
 
     public String json() {
         ArrayList<String> values = new ArrayList<>();
         power.ifPresent(integer -> values.add("\"power\":" + integer));
+        power.ifPresent(integer -> values.add("\"powerKwh\":" + (integer > 0 ? (((double)integer) / 1000) : 0)));
         yieldToday.ifPresent(aDouble -> values.add("\"today\":" + aDouble));
         yieldTotal.ifPresent(aDouble -> values.add("\"total\":" + aDouble));
         return "{" + String.join(",", values) + "}";

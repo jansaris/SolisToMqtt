@@ -14,7 +14,7 @@ class SolisModelTest {
         model.setPower(Optional.of(123));
         model.setYieldToday(Optional.of(1.3));
         model.setYieldTotal(Optional.of(33.4));
-        String expected = "{\"power\":123,\"today\":1.3,\"total\":33.4}";
+        String expected = "{\"power\":123,\"powerKwh\":0.123,\"today\":1.3,\"total\":33.4}";
 
         assertEquals(expected, model.json());
     }
@@ -23,7 +23,16 @@ class SolisModelTest {
     public void jsonWithOnlyPower(){
         SolisModel model = new SolisModel();
         model.setPower(Optional.of(123));
-        String expected = "{\"power\":123}";
+        String expected = "{\"power\":123,\"powerKwh\":0.123}";
+
+        assertEquals(expected, model.json());
+    }
+
+    @Test
+    public void jsonWithPowerOn0(){
+        SolisModel model = new SolisModel();
+        model.setPower(Optional.of(0));
+        String expected = "{\"power\":0,\"powerKwh\":0.0}";
 
         assertEquals(expected, model.json());
     }
